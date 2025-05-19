@@ -1,34 +1,42 @@
 package com.upskill.leetcode;
 
 public class SearchInMountain {
-	
+
 	public static void main(String[] args) {
 
 		int[] arr = { 3, 5, 7, 9, 10, 90, 50, 40, 30, 20 };
-		int target = 10;
+		int target = 40;
 
 		int peak = peakIndexInMountainArray(arr);
-	}
-	
-	static int peakIndexInMountainArray(int[] arr) {
-        int start = 0;
-        int end = arr.length - 1;
 
-        while (start < end) {
-            int mid = start + (end - start) / 2;
-            if (arr[mid] > arr[mid+1]) {
-                // you are in dec part of array
-                // this may be the ans, but look at left
-                // this is why end != mid - 1
-                end = mid;
-            } else {
-                // you are in asc part of array
-                start = mid + 1; // because we know that mid+1 element > mid element
-            }
-        }
-        return start;
-    }
-	
+		int firstTry = orderAgnosticBinarySearch(arr, target, 0, peak);
+		if (firstTry != -1) {
+			System.out.println("Element found in: "+firstTry);
+		} else {
+			int secondTry = orderAgnosticBinarySearch(arr, target, peak + 1, arr.length - 1);
+			System.out.println("Element found in: "+secondTry);
+		}
+	}
+
+	static int peakIndexInMountainArray(int[] arr) {
+		int start = 0;
+		int end = arr.length - 1;
+
+		while (start < end) {
+			int mid = start + (end - start) / 2;
+			if (arr[mid] > arr[mid + 1]) {
+				// you are in dec part of array
+				// this may be the ans, but look at left
+				// this is why end != mid - 1
+				end = mid;
+			} else {
+				// you are in asc part of array
+				start = mid + 1; // because we know that mid+1 element > mid element
+			}
+		}
+		return start;
+	}
+
 	static int orderAgnosticBinarySearch(int[] arr, int target, int start, int end) {
 
 		boolean isAsc = arr[start] < arr[end];
